@@ -56,7 +56,7 @@ jobs:
           fi
 
       - name: Bump to new tag
-        if: success() && env.CURRENT != '' && env.LATEST != ''
+        if: success() && env.LATEST != ''
         env:
           DEBIAN_FRONTEND: noninteractive
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
 
       - name: Create new release
         uses: actions/create-release@v1
-        if: success() && env.CURRENT != '' && env.LATEST != ''
+        if: success() && env.LATEST != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
