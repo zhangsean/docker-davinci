@@ -1,11 +1,11 @@
 #=================================================
-# https://github.com/zhangsean/k8s-descheduler-mirror
-# Description: Auto check latest descheduler release and tag docker image zhangsean/descheduler using GitHub Actions
+# https://github.com/zhangsean/docker-davinci
+# Description: Auto check latest davinci release and tag docker image zhangsean/davinci using GitHub Actions
 # License: Apache V2.0
 # Author: ZhangSean
 #=================================================
 
-name: Follow up descheduler release
+name: Follow up davinci release
 
 on:
   schedule:
@@ -32,17 +32,24 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          sudo apt-get install -y jq
           git fetch --tags
-          export CURRENT=$(cat Dockerfile | awk -F: '{print $2}')
+          export CURRENT=$(git tag --sort=creatordate | tail -n 1)
           echo "CURRENT=$CURRENT"
-          export LATEST=$(curl -I https://github.com/kubernetes-sigs/descheduler/releases/latest | sed -n '/tag/s/.*tag\/\(v.*\)./\1/p')
+          export RELEASE_URL=https://github.com/edp963/davinci/releases
+          export LATEST=$(curl -s $RELEASE_URL | jq -r .[0].tag_name)
           echo "LATEST=$LATEST"
           if [ "$LATEST" != "$CURRENT" ]; then
-            echo "New descheduler released: $LATEST"
-            echo "CURRENT=$CURRENT" >> $GITHUB_ENV
-            echo "LATEST=$LATEST" >> $GITHUB_ENV
+            export LATEST_ASSET=`curl -s $RELEASE_URL | jq -r .[0].assets[0].browser_download_url`
+            if [ -e "$LATEST_ASSET" ]; then
+              echo "No asset in release: $LATEST"
+            else
+              echo "CURRENT=$CURRENT" >> $GITHUB_ENV
+              echo "LATEST=$LATEST" >> $GITHUB_ENV
+              echo "LATEST_ASSET=$LATEST_ASSET" >> $GITHUB_ENV
+            fi
           else
-            echo "No new descheduler released"
+            echo "No new released"
             echo "LATEST=" >> $GITHUB_ENV
           fi
 
@@ -53,11 +60,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Changing tag from $CURRENT to $LATEST"
-          sed -i "s/$CURRENT/$LATEST/g" README.md
-          sed -i "s/$CURRENT/$LATEST/g" Dockerfile
+          sed -i "/* latest/a $LATEST-alpine/g" README.md
+          sed -i "/* latest/a $LATEST/g" README.md
+          sed -i "/ARG DAVINCI_ASSET/d" Dockerfile
+          sed -i "/10 a ARG DAVINCI_ASSET=$LATEST_ASSET" Dockerfile
+          sed -i "/ARG DAVINCI_ASSET/d" alpine.Dockerfile
+          sed -i "/10 a ARG DAVINCI_ASSET=$LATEST_ASSET" alpine.Dockerfile
           git config user.email zxf2342@qq.com
           git config user.name zhangsean
-          git commit -a -m "Bump to descheduler $LATEST"
+          git commit -a -m "Bump to davinci $LATEST"
           git push
 
       - name: Create new release
@@ -69,6 +80,6 @@ jobs:
           tag_name: ${{ env.LATEST }}
           release_name: ${{ env.LATEST }}
           body: |
-            Bump to descheduler ${{ env.LATEST }}
+            Bump to davinci ${{ env.LATEST }}
           draft: false
           prerelease: false

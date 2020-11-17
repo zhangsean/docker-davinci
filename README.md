@@ -1,23 +1,46 @@
-# k8s-descheduler-mirror
+# docker-davinci
 
-Mirror of `k8s.gcr.io/descheduler/descheduler`.
+Docker image for [davinci](https://github.com/edp963/davinci) data dashboard.
 
-gcr.io | docker hub
----|---
-k8s.gcr.io/descheduler/descheduler:v0.19.0 | [zhangsean/descheduler:v0.19.0](https://hub.docker.com/r/zhangsean/descheduler/)
+## Tags
+
+* latest
+
+Tag | Base JRE | Image size | Running memory
+---|---|---|---
+latest | adoptopenjdk:8-jre-openj9 | ~630MB | ~200MiB
+alpine | openjdk:8-jre-alpine | ~290MB | ~600MiB
 
 ## Usage
 
 ```sh
-# Deploy using helm
-helm repo add descheduler https://kubernetes-sigs.github.io/descheduler/
-helm install descheduler --namespace kube-system descheduler/descheduler-helm-chart --image.repository zhangsean/descheduler
-# Deploy using yaml, Run As A CronJob
-kubectl create -f https://github.com/kubernetes-sigs/descheduler/raw/master/kubernetes/base/rbac.yaml
-kubectl create -f https://github.com/kubernetes-sigs/descheduler/raw/master/kubernetes/base/configmap.yaml
-curl -sSL https://github.com/kubernetes-sigs/descheduler/raw/master/kubernetes/cronjob/cronjob.yaml | sed 's|k8s.gcr.io/descheduler|zhangsean|g' | kubectl create -f -
+# pull latest image
+docker pull zhangsean/davinci:latest
+# prepare davinci.sql
+docker run --rm -v $PWD:/tmp zhangsean/davinci:latest cp bin/davinci.sql /tmp/
+# run local mysql and init davinci db tables.
+docker run -itd --name mysql \
+  -p 3306:3306 \
+  -v $PWD/davinci.sql:/docker-entrypoint-initdb.d/davinci.sql \
+  -e MYSQL_DATABASE=davinci \
+  -e MYSQL_ROOT_PASSWORD=pass \
+  mysql:5.7
+# run davinci
+docker run -itd --name davinci \
+  -p 8080:8080 \
+  --link mysql:localdb \
+  -e SPRING_DATASOURCE_URL="jdbc:mysql://localdb/davinci?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true" \
+  -e SPRING_DATASOURCE_USERNAME="root" \
+  -e SPRING_DATASOURCE_PASSWORD="pass" \
+  -e SPRING_MAIL_HOST="smtp.qq.com" \
+  -e SPRING_MAIL_PORT="465" \
+  -e SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE="true" \
+  -e SPRING_MAIL_USERNAME="someone@qq.com" \
+  -e SPRING_MAIL_PASSWORD="bomgxxoocgkobjdc" \
+  -e SPRING_MAIL_NICKNAME="Davinci" \
+  zhangsean/davinci:latest
 ```
 
 ## More info
 
-[kubernetes-sigs/descheduler](https://github.com/kubernetes-sigs/descheduler)
+[edp963/davinci](https://github.com/edp963/davinci)
