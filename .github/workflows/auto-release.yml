@@ -40,6 +40,7 @@ jobs:
           export LATEST=$(curl -s $RELEASE_URL | jq -r .[0].tag_name)
           echo "LATEST=$LATEST"
           if [ "$LATEST" != "$CURRENT" ]; then
+            echo "New release: $LATEST"
             export LATEST_ASSET=`curl -s $RELEASE_URL | jq -r .[0].assets[0].browser_download_url`
             if [ -e "$LATEST_ASSET" ]; then
               echo "No asset in release: $LATEST"
@@ -47,6 +48,7 @@ jobs:
               echo "CURRENT=$CURRENT" >> $GITHUB_ENV
               echo "LATEST=$LATEST" >> $GITHUB_ENV
               echo "LATEST_ASSET=$LATEST_ASSET" >> $GITHUB_ENV
+              echo "Release asset: $LATEST_ASSET"
             fi
           else
             echo "No new released"
