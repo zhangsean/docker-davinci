@@ -36,7 +36,7 @@ jobs:
           git fetch --tags
           export CURRENT=$(git tag --sort=creatordate | tail -n 1)
           echo "CURRENT=$CURRENT"
-          export RELEASE_URL=https://github.com/edp963/davinci/releases
+          export RELEASE_URL=https://api.github.com/repos/edp963/davinci/releases
           export LATEST=$(curl -s $RELEASE_URL | jq -r .[0].tag_name)
           echo "LATEST=$LATEST"
           if [ "$LATEST" != "$CURRENT" ]; then
