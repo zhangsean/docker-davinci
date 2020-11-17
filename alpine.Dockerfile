@@ -14,7 +14,8 @@ RUN wget -O davinci.zip $DAVINCI_URL \
  && unzip davinci.zip -d /opt\
  && rm -rf davinci.zip /opt/davinci \
  && mv -f /opt/davinci-assembly* /opt/davinci \
- && cp -v /opt/davinci/config/application.yml.example /opt/davinci/config/application.yml \
+ && cd /opt/davinci/ \
+ && cp -v config/application.yml.example config/application.yml \
  && sed -i 's|address:\ 127.0.0.1|address:|' config/application.yml
 
 CMD ["./bin/start-server.sh"]
