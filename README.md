@@ -2,6 +2,8 @@
 
 Docker image for [davinci](https://github.com/edp963/davinci) data dashboard.
 
+[![DockerHub Badge](http://dockeri.co/image/zhangsean/davinci)](https://hub.docker.com/r/zhangsean/davinci/)
+
 ## Tags
 
 * latest
