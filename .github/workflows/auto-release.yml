@@ -57,14 +57,7 @@ jobs:
 
       - name: SSH connection to Actions
         if: success() && env.LATEST != ''
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: whoami
-
+        uses: mxschmitt/action-tmate@v3
 
       - name: Bump to new tag
         if: success() && env.LATEST != ''
