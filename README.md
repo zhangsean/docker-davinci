@@ -7,6 +7,8 @@ Docker image for [davinci](https://github.com/edp963/davinci) data dashboard.
 * latest
 * v0.3.0-rc
 * v0.3.0-rc-alpine
+* v0.3.0-rc
+* v0.3.0-rc-alpine
 
 Tag | Base JRE | Image size | Running memory
 ---|---|---|---
