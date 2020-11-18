@@ -56,11 +56,15 @@ jobs:
           fi
 
       - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
         if: success() && env.LATEST != ''
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
+
 
       - name: Bump to new tag
         if: success() && env.LATEST != ''
