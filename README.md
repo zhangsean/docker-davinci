@@ -8,10 +8,10 @@ Docker image for [davinci](https://github.com/edp963/davinci) data dashboard.
 * v0.3.0-rc
 * v0.3.0-rc-alpine
 
-Tag | Base JRE | Image size | Running memory
+Tag | Base JRE | Compressed image size | Running memory
 ---|---|---|---
-latest | adoptopenjdk:8-jre-openj9 | ~630MB | ~200MiB
-alpine | openjdk:8-jre-alpine | ~290MB | ~600MiB
+latest | adoptopenjdk:8-jre-openj9 | ~227 MB | ~200 MiB
+alpine | openjdk:8-jre-alpine | ~188 MB | ~600 MiB
 
 ## Usage
 
