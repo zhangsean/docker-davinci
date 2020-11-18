@@ -18,4 +18,4 @@ RUN wget -O davinci.zip $DAVINCI_ASSET \
  && cp -v config/application.yml.example config/application.yml \
  && sed -i 's|address:\ 127.0.0.1|address:|' config/application.yml
 
-CMD ["./bin/start-server.sh"]
+CMD ["sh", "./bin/start-server.sh"]
