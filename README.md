@@ -34,7 +34,7 @@ docker run -itd --name mysql \
 docker run -itd --name davinci \
   -p 8080:8080 \
   --link mysql:localdb \
-  -e SPRING_DATASOURCE_URL="jdbc:mysql://localdb/davinci?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true" \
+  -e SPRING_DATASOURCE_URL="jdbc:mysql://localdb/davinci?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false" \
   -e SPRING_DATASOURCE_USERNAME="root" \
   -e SPRING_DATASOURCE_PASSWORD="pass" \
   -e SPRING_MAIL_HOST="smtp.qq.com" \
@@ -44,6 +44,8 @@ docker run -itd --name davinci \
   -e SPRING_MAIL_PASSWORD="bomgxxoocgkobjdc" \
   -e SPRING_MAIL_NICKNAME="Davinci" \
   zhangsean/davinci:latest
+# login to http://localhost:8080 with following account/password.
+guest/123456
 ```
 
 ## More info
