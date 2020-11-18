@@ -8,9 +8,9 @@ WORKDIR /opt/davinci
 
 EXPOSE 8080
 
-ARG DAVINCI_URL=https://github.com/edp963/davinci/releases/download/v0.3.0-rc/davinci-assembly_0.3.1-0.3.1-SNAPSHOT-dist-rc.zip
+ARG DAVINCI_ASSET=https://github.com/edp963/davinci/releases/download/v0.3.0-rc/davinci-assembly_0.3.1-0.3.1-SNAPSHOT-dist-rc.zip
 
-RUN wget -O davinci.zip $DAVINCI_URL \
+RUN wget -O davinci.zip $DAVINCI_ASSET \
  && unzip davinci.zip -d /opt\
  && rm -rf davinci.zip /opt/davinci \
  && mv -f /opt/davinci-assembly* /opt/davinci \
