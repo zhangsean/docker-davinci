@@ -55,6 +55,13 @@ jobs:
             echo "LATEST=" >> $GITHUB_ENV
           fi
 
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: success() && env.LATEST != ''
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
       - name: Bump to new tag
         if: success() && env.LATEST != ''
         env:
