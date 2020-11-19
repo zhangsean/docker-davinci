@@ -62,12 +62,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Bump to $LATEST"
-          sed -i "/* latest/a * $LATEST-alpine" README.md
-          sed -i "/* latest/a * $LATEST" README.md
-          sed -i "/ARG DAVINCI_ASSET/d" Dockerfile
-          sed -i "10 a ARG DAVINCI_ASSET=$LATEST_ASSET" Dockerfile
-          sed -i "/ARG DAVINCI_ASSET/d" alpine.Dockerfile
-          sed -i "10 a ARG DAVINCI_ASSET=$LATEST_ASSET" alpine.Dockerfile
+          sed -i "11 a $LATEST | $LATEST-alpine" README.md
+          sed -i "11 d; 10 a ARG DAVINCI_ASSET=$LATEST_ASSET" Dockerfile
+          sed -i "11 d; 10 a ARG DAVINCI_ASSET=$LATEST_ASSET" alpine.Dockerfile
           git config user.email zxf2342@qq.com
           git config user.name zhangsean
           git commit -a -m "Bump to davinci $LATEST"
