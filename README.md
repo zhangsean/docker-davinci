@@ -7,6 +7,8 @@ Docker image for [davinci](https://github.com/edp963/davinci) data dashboard.
 ## Tags
 
 * latest
+* v0.3.0-rc
+* v0.3.0-rc-alpine
 * alpine
 * v0.3.0-rc
 * v0.3.0-rc-alpine
